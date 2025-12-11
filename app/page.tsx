@@ -96,15 +96,15 @@ export default function UsersPage() {
                 />
                 <button
                     onClick={createUser}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="bg-blue-300 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                 >
                     Add
                 </button>
             </div>
 
-            {/* USER LIST */}
+            {/* LIST */}
             <div className="bg-white shadow rounded-xl p-4">
-                <h2 className="text-xl font-semibold mb-3">User List</h2>
+                <h2 className="text-xl font-semibold mb-3">List</h2>
 
                 <table className="w-full border">
                     <thead>
@@ -122,7 +122,7 @@ export default function UsersPage() {
                             <td className="p-2">{u.email}</td>
                             <td className="p-2 text-center space-x-2">
                                 <button
-                                    className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                    className="px-3 py-1 bg-yellow-200 text-white rounded hover:bg-yellow-500"
                                     onClick={() => {
                                         setEditing(u._id);
                                         setEditForm({ name: u.name, email: u.email });
@@ -131,7 +131,7 @@ export default function UsersPage() {
                                     Edit
                                 </button>
                                 <button
-                                    className="px-3 py-1 bg-red-600 text-white rounded"
+                                    className="px-3 py-1 bg-red-300 text-white rounded hover:bg-red-700"
                                     onClick={() => deleteUser(u._id)}
                                 >
                                     Delete
@@ -143,7 +143,7 @@ export default function UsersPage() {
                 </table>
             </div>
 
-            {/* EDIT POPUP */}
+            {/* EDIT */}
             {editing && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-xl shadow-xl w-80 space-y-3">
