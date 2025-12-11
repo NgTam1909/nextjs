@@ -19,25 +19,42 @@ export default function UsersPage() {
 
     // Create user
     const createUser = async () => {
+        let email = form.email;
+        if (!email.includes("@")) {
+            email = email + "@gmail.com";
+        }
+
         await fetch("/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
+            body: JSON.stringify({ name: form.name, email }),
         });
+
         setForm({ name: "", email: "" });
         getUsers();
     };
 
+
     // Update user
     const updateUser = async (id: string) => {
+        let email = editForm.email;
+        if (!email.includes("@")) {
+            email = email + "@gmail.com";
+        }
+
         await fetch(`/api/users/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(editForm),
+            body: JSON.stringify({
+                name: editForm.name,
+                email
+            }),
         });
+
         setEditing(null);
         getUsers();
     };
+
 
     // Delete user
     const deleteUser = async (id: string) => {
@@ -58,11 +75,11 @@ export default function UsersPage() {
 
 
     return (
-        <div className="max-w-2xl mx-auto p-6 space-y-6 text-gray-900">
-            <h1 className="text-3xl font-bold">User CRUD (Next.js + MongoDB)</h1>
+        <div className="max-w-2xl mx-auto p-6 space-y-6 text-gray-900 bg-white">
+            <h1 className="text-3xl font-bold text-center">User CRUD (Next.js + MongoDB)</h1>
 
             {/* ADD USER FORM */}
-            <div className="bg-white shadow p-4 rounded-xl space-y-3">
+            <div className="bg-white shadow p-4 rounded-xl space-y-3 text-black">
                 <h2 className="text-xl font-semibold">Add User</h2>
                 <input
                     className="w-full border p-2 rounded"
@@ -74,11 +91,8 @@ export default function UsersPage() {
                     className="w-full border p-2 rounded"
                     placeholder="Email"
                     value={form.email}
-                    onChange={(e) => {
-                        let val = e.target.value;
-                        if (!val.includes("@")) val = val + "@gmail.com";
-                        setForm({ ...form, email: val });
-                    }}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })
+                    }
                 />
                 <button
                     onClick={createUser}
@@ -145,11 +159,9 @@ export default function UsersPage() {
                         <input
                             className="w-full border p-2 rounded"
                             value={editForm.email}
-                            onChange={(e) => {
-                                let val = e.target.value;
-                                if (!val.includes("@")) val = val + "@gmail.com";
-                                setEditForm({ ...editForm, email: val });
-                            }}
+                            onChange={(e) =>
+                                setEditForm({ ...editForm, email: e.target.value })
+                            }
                         />
 
                         <div className="flex justify-end space-x-3">
