@@ -1,10 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-
+interface IUser {
+    _id: string;
+    name: string;
+    email: string;
+}
 export default function UsersPage() {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<IUser[]>([]);
     const [form, setForm] = useState({ name: "", email: "" });
-    const [editing, setEditing] = useState(null);
+    const [editing, setEditing] = useState<string | null>(null);
     const [editForm, setEditForm] = useState({ name: "", email: "" });
 
     // Load all users
@@ -43,8 +47,15 @@ export default function UsersPage() {
     };
 
     useEffect(() => {
-        getUsers();
+        const fetchUsers = async () => {
+            const res = await fetch("/api/users");
+            const data: IUser[] = await res.json();
+            setUsers(data);
+        };
+
+        fetchUsers();
     }, []);
+
 
     return (
         <div className="max-w-2xl mx-auto p-6 space-y-6 text-gray-900">
@@ -91,7 +102,7 @@ export default function UsersPage() {
                     </thead>
 
                     <tbody>
-                    {users.map((u: any) => (
+                    {users.map((u) => (
                         <tr key={u._id} className="border">
                             <td className="p-2">{u.name}</td>
                             <td className="p-2">{u.email}</td>

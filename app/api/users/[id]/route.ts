@@ -1,18 +1,28 @@
 import { NextResponse } from "next/server";
 import { getUserById, updateUser, deleteUser } from "@/lib/services/user.service";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
-    const user = await getUserById(params.id);
+interface ParamsPromise {
+    params: Promise<{ id: string }>;
+}
+
+// GET: /api/users/:id
+export async function GET(req: Request, context: ParamsPromise) {
+    const { id } = await context.params;
+    const user = await getUserById(id);
     return NextResponse.json(user);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    const data = await req.json();
-    const updated = await updateUser(params.id, data);
+// PUT: /api/users/:id
+export async function PUT(req: Request, context: ParamsPromise) {
+    const { id } = await context.params;
+    const body = await req.json();
+    const updated = await updateUser(id, body);
     return NextResponse.json(updated);
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
-    await deleteUser(params.id);
+// DELETE: /api/users/:id
+export async function DELETE(req: Request, context: ParamsPromise) {
+    const { id } = await context.params;
+    await deleteUser(id);
     return NextResponse.json({ success: true });
 }
