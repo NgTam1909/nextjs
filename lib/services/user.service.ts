@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongoose.lib";
 export interface IUser {
     name: string;
     email: string;
+    pass: string;
 }
 export async function getAllUsers() {
     await connectDB();
@@ -19,7 +20,6 @@ export async function createUser(data: IUser) {
     await connectDB();
     return User.create(data);
 }
-
 export async function updateUser(id: string, data: Partial<IUser>) {
     await connectDB();
     return User.findByIdAndUpdate(id, data, { new: true });

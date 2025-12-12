@@ -6,7 +6,7 @@ if (!MONGODB_URI) {
     throw new Error("Missing MONGODB_URI in .env.local");
 }
 
-let isConnected = false; //
+let isConnected = false;
 
 export const connectDB = async () => {
     if (isConnected) return;

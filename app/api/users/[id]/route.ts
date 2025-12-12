@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getUserById, updateUser, deleteUser } from "@/lib/services/user.service";
+import { getUserById, updateUser, deleteUser, IUser } from "@/lib/services/user.service";
+import bcrypt from 'bcryptjs';
 
 interface ParamsPromise {
     params: Promise<{ id: string }>;
@@ -15,8 +16,26 @@ export async function GET(req: Request, context: ParamsPromise) {
 // PUT: /api/users/:id
 export async function PUT(req: Request, context: ParamsPromise) {
     const { id } = await context.params;
-    const body = await req.json();
+    const originalBody : Partial<IUser> = await req.json();
+
+    // 2. Tạo một bản sao có thể thay đổi thuộc tính
+    const body = { ...originalBody };
+
+    // 3. XỬ LÝ MẬT KHẨU
+    // Kiểm tra nếu có mật khẩu mới và không phải là chuỗi rỗng
+    if (body.pass && body.pass.length > 0) {
+        const salt = await bcrypt.genSalt(10);
+        // Gán trực tiếp lên thuộc tính của bản sao 'body'
+        body.pass = await bcrypt.hash(body.pass, salt);
+    } else {
+        // Nếu pass rỗng hoặc không tồn tại, xóa trường 'pass'
+        delete body.pass;
+    }
     const updated = await updateUser(id, body);
+
+    const updatedResponse = updated.toObject();
+    delete updatedResponse.pass;
+
     return NextResponse.json(updated);
 }
 
